@@ -16,7 +16,7 @@ from flax.training.common_utils import shard_prng_key
 
 import wandb
 
-from consts import COND_SCALE, DALLE_COMMIT_ID, DALLE_MODEL_MEGA_FULL, DALLE_MODEL_MEGA, DALLE_MODEL_MINI, GEN_TOP_K, GEN_TOP_P, TEMPERATURE, VQGAN_COMMIT_ID, VQGAN_REPO, ModelSize
+from consts import IMG_SIZE, COND_SCALE, DALLE_COMMIT_ID, DALLE_MODEL_MEGA_FULL, DALLE_MODEL_MEGA, DALLE_MODEL_MINI, GEN_TOP_K, GEN_TOP_P, TEMPERATURE, VQGAN_COMMIT_ID, VQGAN_REPO, ModelSize
 
 os.environ["XLA_PYTHON_CLIENT_ALLOCATOR"] = "platform" # https://github.com/saharmor/dalle-playground/issues/14#issuecomment-1147849318
 os.environ["WANDB_SILENT"] = "true"
@@ -107,8 +107,8 @@ class DalleModel:
 
             # decode images
             decoded_images = p_decode(self.vqgan, encoded_images, self.vqgan_params)
-            decoded_images = decoded_images.clip(0.0, 1.0).reshape((-1, 256, 256, 3))
+            decoded_images = decoded_images.clip(0.0, 1.0).reshape((-1, IMG_SIZE, IMG_SIZE, 3))
             for img in decoded_images:
-                images.append(Image.fromarray(np.asarray(img * 255, dtype=np.uint8)))
+                images.append(Image.fromarray(np.asarray(img * IMG_SIZE-1, dtype=np.uint8)))
 
         return images

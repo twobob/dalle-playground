@@ -18,6 +18,8 @@ GEN_TOP_P = None
 TEMPERATURE  = None
 COND_SCALE = 10.0
 
+IMG_SIZE = 512
+
 class ModelSize(Enum):
     MINI = "Mini"
     MEGA = "Mega"
